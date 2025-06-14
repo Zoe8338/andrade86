@@ -34,6 +34,10 @@
         .text-dark-text { color: var(--color-dark-text); }
 
         /* General styling for body and text */
+        html {
+            scroll-behavior: smooth; /* Added for smooth scrolling */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             color: var(--color-dark-text);
@@ -122,7 +126,7 @@
     <section id="services" class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-6 md:px-12">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-primary-blue">Our Expert Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8"> <!-- Adjusted grid for 5 items -->
 
                 <!-- Service Card 1: File Servers & Data Storage -->
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 p-8 flex flex-col items-center text-center">
@@ -180,6 +184,20 @@
                     </a>
                 </div>
 
+                <!-- NEW Service Card 5: Network Installment -->
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300 p-8 flex flex-col items-center text-center">
+                    <div class="bg-primary-blue text-white rounded-full p-4 mb-6 shadow-md">
+                        <span class="material-icons text-4xl">router</span> <!-- Icon for networking -->
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark-text">Network Installment</h3>
+                    <p class="text-gray-700 mb-6 flex-grow">
+                        Seamless setup and optimization of your wired and wireless networks for reliable connectivity.
+                    </p>
+                    <a href="#contact" class="text-primary-blue font-semibold hover:text-accent-peach transition duration-300 flex items-center">
+                        Learn More <span class="material-icons text-lg ml-1">arrow_forward</span>
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>
@@ -204,8 +222,12 @@
     <section id="contact" class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-6 md:px-12 max-w-2xl">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-primary-blue">Get In Touch</h2>
+
+            <!-- Message container for form submission status -->
+            <div id="form-status-message" class="hidden text-center p-4 mb-6 rounded-lg text-lg font-semibold"></div>
+
             <div class="bg-white rounded-xl shadow-lg p-8 md:p-12">
-                <form action="#" method="POST"> <!-- Action should point to a backend script for actual form submission -->
+                <form action="send_email.php" method="POST"> <!-- UPDATED: Action points to PHP script -->
                     <div class="mb-6">
                         <label for="name" class="block text-gray-700 text-lg font-medium mb-2">Name</label>
                         <input type="text" id="name" name="name" class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue transition duration-200" placeholder="Your Name" required>
@@ -226,6 +248,7 @@
                             <option value="website_deployments">Website Deployments</option>
                             <option value="pbx_systems">PBX Phone Systems</option>
                             <option value="it_helpdesk">IT Helpdesk Support</option>
+                            <option value="network_installment">Network Installment</option>
                             <option value="general_inquiry">General Inquiry</option>
                         </select>
                     </div>
@@ -286,6 +309,7 @@
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const navLinks = document.querySelectorAll('#mobile-menu a'); // Get all links in the mobile menu
+            const formStatusMessage = document.getElementById('form-status-message');
 
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden'); // Toggle the hidden class
@@ -317,7 +341,27 @@
                     menuIcon.textContent = 'menu';
                 }
             });
+
+            // Display form submission status message if available in URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const msg = urlParams.get('msg');
+
+            if (status && msg) {
+                formStatusMessage.textContent = decodeURIComponent(msg);
+                formStatusMessage.classList.remove('hidden');
+                if (status === 'success') {
+                    formStatusMessage.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-400');
+                } else if (status === 'error') {
+                    formStatusMessage.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-400');
+                }
+                // Optional: Clear URL parameters after displaying message to prevent re-showing on refresh
+                // window.history.replaceState({}, document.title, window.location.pathname);
+            }
         });
     </script>
+</body>
+</html>
+
 </body>
 </html>
